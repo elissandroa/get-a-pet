@@ -9,17 +9,26 @@ const getToken = require('../helpers/get-token')
 
 module.exports = class UserController {
 
-    static async getUserById(req,res) {
-        
-        const id = req.params.id 
+    static async getUserById(req, res) {
+
+        const id = req.params.id
 
         const user = await User.findById(id).select('-password')
-        
-        if(!user){
-             res.status(422).json({ message: 'Usuário não encontrado!' })
+
+        if (!user) {
+            res.status(422).json({ message: 'Usuário não encontrado!' })
             return
         }
         res.status(200).json(user)
+    }
+
+    static async editUser(req, res) {
+        res.status(200).json(
+            {
+                message: 'Deu certo Update!'
+            }
+        )
+        return
     }
 
     static async register(req, res) {
@@ -119,7 +128,7 @@ module.exports = class UserController {
 
             const token = getToken(req)
             const decoded = jwt.verify(token, 'nossosecret-çfkaslçfupifásfaff51a65f1a65f4adfshasdhflokafhdlkh')
-            
+
             currentUser = await User.findById(decoded.id)
 
             currentUser.password = undefined
