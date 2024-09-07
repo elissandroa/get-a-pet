@@ -58,14 +58,6 @@ module.exports = class UserController {
             await createUserToken(newUser, req, res)
         } catch (error) {
             res.status(500).json({message: error})
-            return
         }
-
-
-
-
-
-        res.status(200).json({ message: 'Usuário Cadastrado com sucesso!' })
     }
-
 }

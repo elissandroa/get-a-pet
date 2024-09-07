@@ -18,6 +18,7 @@ const createUserToken = async (user, req, res) => {
         email: user.email,
         token: token,
     })
+
 }
 
 
