@@ -15,11 +15,9 @@ app.use(cors({ credentials: true, origin: 'http://localhost:3000' }))
 app.use(express.static('public'))
 
 //Routes
+const UserRoutes = require('./routes/UserRoutes')
 
-
-app.get('/', (req, res) => {
-    res.status(200).json({message: "Api respondendo na porta 5000"})
-})
+app.use('/users', UserRoutes)
 
 
 app.listen(port, () => {
