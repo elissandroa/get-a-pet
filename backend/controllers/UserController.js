@@ -1,6 +1,11 @@
-const createUserToken = require('../helpers/create-user-token')
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+// Helpers
+const createUserToken = require('../helpers/create-user-token')
+const getToken = require('../helpers/get-token')
+
 
 module.exports = class UserController {
 
@@ -75,34 +80,40 @@ module.exports = class UserController {
             return
         }
 
-         //Check if User exists
-         const user = await User.findOne({ email: email })
-         if (!user) {
-             res.status(422).json({ message: 'Não há usuário cadastrado com esse e-mail' })
-             return
-         }
+        //Check if User exists
+        const user = await User.findOne({ email: email })
+        if (!user) {
+            res.status(422).json({ message: 'Não há usuário cadastrado com esse e-mail' })
+            return
+        }
 
-         //Check if password match with db password
-        
-         const checkPassword = await bcrypt.compare(password, user.password)
+        //Check if password match with db password
 
-         if(!checkPassword){
+        const checkPassword = await bcrypt.compare(password, user.password)
+
+        if (!checkPassword) {
             res.status(422).json({ message: 'Senha inválida!' })
             return
-         }
+        }
 
-         await createUserToken(user, req, res)
+        await createUserToken(user, req, res)
     }
 
     static async checkUser(req, res) {
         let currentUser
-        console.log(req.headers.authorization)
-        if(req.headers.authorization){
+
+        if (req.headers.authorization) {
+
+            const token = getToken(req)
+            const decoded = jwt.verify(token, 'nossosecret-çfkaslçfupifásfaff51a65f1a65f4adfshasdhflokafhdlkh')
+            
+            currentUser = await User.findById(decoded.id)
+
+            currentUser.password = undefined
 
         } else {
             currentUser = null
         }
-
-        res.status(200).send(currentUser)
+        res.status(200).json(currentUser)
     }
 }

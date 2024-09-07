@@ -8,7 +8,7 @@ const createUserToken = async (user, req, res) => {
             name: user.name,
             id: user._id,
         },
-        "nossosecret-çfkaslçfu´pifásfaff51a65f1a65f4adfshasdhflokafhdlkh",
+        "nossosecret-çfkaslçfupifásfaff51a65f1a65f4adfshasdhflokafhdlkh",
     )
 
     //Return a token
