@@ -1,7 +1,7 @@
 const router = require('express').Router()
 
 //Middlewares
-const verifyToken = require('../helpers/verify-tokey')
+const verifyToken = require('../helpers/verify-token')
 const { imageUpload } = require('../helpers/image-upload')
 
 const UserController = require('../controllers/UserController')
