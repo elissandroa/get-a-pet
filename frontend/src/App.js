@@ -4,6 +4,7 @@ import { Register } from './components/pages/Auth/Register';
 import { Login } from './components/pages/Auth/Login';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
+import { Container } from './components/layout/Container'
 
 
 
@@ -11,11 +12,13 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <Routes>
-        <Route path='/register' element={<Register />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/' element={<Home />} />
-      </Routes>
+      <Container>
+        <Routes>
+          <Route path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/' element={<Home />} />
+        </Routes>
+      </Container>
       <Footer />
     </Router>
 
