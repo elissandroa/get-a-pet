@@ -30,14 +30,17 @@ module.exports = class UserController {
 
         const { name, email, phone, password, confirmpassword } = req.body
 
-        let image = ''
-
+        
         const token = await getToken(req)
         const user = await getUserByToken(token)
 
         if (!user) {
             res.status(422).json({ message: 'Usuário não encontrado!' })
             return
+        }
+
+        if(req.file){
+            user.image = req.file.filename
         }
 
         //Validations
@@ -67,15 +70,7 @@ module.exports = class UserController {
         }
         user.phone = phone
 
-        if (!password) {
-            res.status(422).json({ message: 'A senha é obrigatória' })
-            return
-        }
-        if (!confirmpassword) {
-            res.status(422).json({ message: 'A confirmação de senha é obrigatória' })
-            return
-        }
-
+        
         if (password !== confirmpassword) {
             res.status(422).json({ message: 'As senhas não conferem' })
             return
