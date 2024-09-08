@@ -2,6 +2,7 @@ const Pet = require('../models/Pet')
 const User = require('../models/User')
 const getToken = require('../helpers/get-token')
 const getUserByToken = require('../helpers/get-user-by-token')
+const ObjectId = require('mongoose').Types.ObjectId
 
 module.exports = class PetController {
     // Create a pet
@@ -98,6 +99,12 @@ module.exports = class PetController {
 
     static async getPetById(req, res) {
         const id = req.params.id
+
+        //Check if id is valid
+        if (!ObjectId.isValid(id)) {
+            res.status(422).json({ message: "ID inválido!" })
+            return
+        }
         try {
             const pet = await Pet.findById(id)
 
@@ -119,6 +126,41 @@ module.exports = class PetController {
         const pets = await Pet.find({ 'adopter._id': user._id }).sort('-createdAt')
 
         res.status(200).json({ message: 'Lisa de Pets adotados pelo usuário', pets })
+    }
+
+    static async removePetById(req, res) {
+        const id = req.params.id
+
+        //Check if id is valid
+        if (!ObjectId.isValid(id)) {
+            res.status(422).json({ message: "ID inválido!" })
+            return
+        }
+
+        //Check if pet exists
+        const pet = await Pet.findById(id)
+
+        if (!pet) {
+            res.status(404).json({ message: "Pet não encontrado!" })
+            return
+        }
+
+        //Check if logged in user registered the pet
+        const token = await getToken(req)
+        const user = await getUserByToken(token)
+
+        if (pet.User._id.toString() !== user._id.toString()) {
+            res.status(422).json({ message: "Houve um problema e processar a sua solicitação, tente novamente mais tarde!" })
+            return
+        }
+
+        try {
+            await Pet.findByIdAndDelete(id)
+            res.status(200).json({ message: 'Pet removido com sucesso!' })
+        } catch (error) {
+            res.status(422).json({ message: "Falha ao deletar, tente novamente mais tarde!" })
+            return
+        }
     }
 
 }
