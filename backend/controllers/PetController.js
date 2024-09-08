@@ -268,12 +268,12 @@ module.exports = class PetController {
         }
 
         //Check if user has already scheduled a visit
-        if(pet.adopter){
-            if(pet.adopter._id.equals(user._id)){
+        if (pet.adopter) {
+            if (pet.adopter._id.equals(user._id)) {
                 res.status(422).json({ message: "Você já agendou uma visita para este Pet!" })
                 return
             }
-        } 
+        }
         //Add user to Pet
         pet.adopter = {
             _id: user._id,
@@ -284,6 +284,40 @@ module.exports = class PetController {
         try {
             await Pet.findByIdAndUpdate(id, pet)
             res.status(200).json({ message: `A visita agendada com sucesso, entre em contato com ${pet.User.name} pelo telefone ${pet.User.phone}` })
+        } catch (error) {
+            res.status(500).json({ message: 'Houve um erro ao processar a sua solicitação, tente novamente mais tarde!' })
+            return
+        }
+
+    }
+
+    static async concludeAdoption(req, res) {
+        const id = req.params.id
+        //Check if id is valid
+        if (!ObjectId.isValid(id)) {
+            res.status(422).json({ message: "ID inválido!" })
+            return
+        }
+        //Check if pet exists
+        const pet = await Pet.findById(id)
+        if (!pet) {
+            res.status(404).json({ message: "Pet não encontrado!" })
+            return
+        }
+        //Check if logged in user registered the pet
+        const token = await getToken(req)
+        const user = await getUserByToken(token)
+
+        if (pet.User._id.equals(user._id)) {
+            res.status(422).json({ message: "Houve um erro ao processar a sua solicitação, tente novamente mais tarde!" })
+            return
+        }
+
+        pet.available = false
+
+        try {
+            await Pet.findByIdAndUpdate(id, pet)
+            res.status(200).json({ message: `Parabéns o ciclo de adoção, foi realizado com sucesso!` })
         } catch (error) {
             res.status(500).json({ message: 'Houve um erro ao processar a sua solicitação, tente novamente mais tarde!' })
             return
