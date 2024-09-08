@@ -94,6 +94,24 @@ module.exports = class PetController {
         res.status(200).json({ message: 'Lisa de Pets do usuário', pets })
     }
 
+    //Get pet by id
+
+    static async getPetById(req, res) {
+        const id = req.params.id
+        try {
+            const pet = await Pet.findById(id)
+
+            if (!pet) {
+                res.status(422).json({ message: "Pet não encontrado!" })
+                return
+            }
+            res.status(200).json({ pet })
+        } catch (error) {
+            res.status(422).json({ message: "Pet não encontrado!" })
+            return
+        }
+    }
+
     static async getAllUserAdoptions(req, res) {
         const token = await getToken(req)
         const user = await getUserByToken(token)

@@ -14,14 +14,18 @@ module.exports = class UserController {
     static async getUserById(req, res) {
 
         const id = req.params.id
+        try {
+            const user = await User.findById(id)
 
-        const user = await User.findById(id).select('-password')
-
-        if (!user) {
-            res.status(422).json({ message: 'Usuário não encontrado!' })
+            if (!user) {
+                res.status(422).json({ message: "Usuário não encontrado!" })
+                return
+            }
+            res.status(200).json({ user })
+        } catch (error) {
+            res.status(422).json({ message: "Usuário não encontrado!" })
             return
         }
-        res.status(200).json(user)
     }
 
     static async editUser(req, res) {
