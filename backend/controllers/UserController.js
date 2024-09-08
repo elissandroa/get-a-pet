@@ -5,6 +5,8 @@ const jwt = require('jsonwebtoken')
 // Helpers
 const createUserToken = require('../helpers/create-user-token')
 const getToken = require('../helpers/get-token')
+const getUserByToken = require('../helpers/get-user-by-token')
+
 
 
 module.exports = class UserController {
@@ -23,12 +25,61 @@ module.exports = class UserController {
     }
 
     static async editUser(req, res) {
-        res.status(200).json(
-            {
-                message: 'Deu certo Update!'
-            }
-        )
-        return
+
+        const id = req.params.id
+
+        const { name, email, phone, password, confirmpassword } = req.body
+
+        let image = ''
+
+        const token = await getToken(req)
+        const user = await getUserByToken(token)
+
+        if (!user) {
+            res.status(422).json({ message: 'Usuário não encontrado!' })
+            return
+        }
+
+        //Validations
+        if (!name) {
+            res.status(422).json({ message: 'O nome é obrigatório' })
+            return
+        }
+        if (!email) {
+            res.status(422).json({ message: 'O E-mail é obrigatório' })
+            return
+        }
+
+        //Check if email has already taken
+        const userExists = await User.findOne({ email: email })
+
+        if (user.email !== email && userExists) {
+            res.status(422).json({
+                message: 'Favor utilize outro e-mail'
+            })
+        }
+
+        if (!phone) {
+            res.status(422).json({ message: 'O telefone é obrigatório' })
+            return
+        }
+        if (!password) {
+            res.status(422).json({ message: 'A senha é obrigatória' })
+            return
+        }
+        if (!confirmpassword) {
+            res.status(422).json({ message: 'A confirmação de senha é obrigatória' })
+            return
+        }
+
+        if (password !== confirmpassword) {
+            res.status(422).json({ message: "A senha e a confirmação de senha precisam ser iguais" })
+        }
+
+        user.password = undefined
+        
+        res.status(200).json(user)
+
     }
 
     static async register(req, res) {
