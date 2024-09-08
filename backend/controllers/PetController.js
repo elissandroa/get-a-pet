@@ -128,6 +128,88 @@ module.exports = class PetController {
         res.status(200).json({ message: 'Lisa de Pets adotados pelo usuário', pets })
     }
 
+    static async updatePet(req, res) {
+        const id = req.params.id
+        const { name, age, wheight, color, available } = req.body
+
+        const images = req.files
+
+        const updatedData = {}
+
+
+        //Check if id is valid
+        if (!ObjectId.isValid(id)) {
+            res.status(422).json({ message: "ID inválido!" })
+            return
+        }
+
+        //Check if pet exists
+        const pet = await Pet.findById(id)
+        if (!pet) {
+            res.status(422).json({ message: "Pet não encontrado!" })
+            return
+        }
+
+        const token = await getToken(req)
+        const user = await getUserByToken(token)
+
+        if (pet.User._id.toString() !== user._id.toString()) {
+            res.status(422).json({ message: "Houve um problema e processar a sua solicitação, tente novamente mais tarde!" })
+            return
+        }
+        //Validations
+        if (!name) {
+            res.status(422).json({ message: 'O nome é obrigatório' })
+            return
+        } else {
+            updatedData.name = name
+        }
+
+
+        if (!age) {
+            res.status(422).json({ message: 'A idade é obrigatória' })
+            return
+        } else {
+            updatedData.age = age
+        }
+
+
+        if (!wheight) {
+            res.status(422).json({ message: 'O peso é obrigatório' })
+            return
+        } else {
+            updatedData.wheight = wheight
+        }
+
+
+        if (!color) {
+            res.status(422).json({ message: 'A cor é obrigatória' })
+            return
+        } else {
+            updatedData.color = color
+        }
+
+
+        if (images.length === 0) {
+            res.status(422).json({ message: 'A imagem é obrigatória' })
+            return
+        } else {
+            updatedData.images = []
+            images.map((image) => {
+                updatedData.images.push(image.filename)
+            })
+        }
+       
+        try {
+            await Pet.findByIdAndUpdate(id, updatedData)
+            res.status(200).json({message: 'Pet Atualizado com sucesso!'})
+        } catch (error) {
+            res.status(500).json({ message: 'Houve um erro ao processar a sua solicitação, tente novamente mais tarde!' })
+            return
+        }
+
+    }
+
     static async removePetById(req, res) {
         const id = req.params.id
 
