@@ -9,6 +9,7 @@ import { Container } from './components/layout/Container'
 
 /* Context */
 import { UserProvider } from './context/UserContext';
+import { Message } from './components/layout/Message';
 
 
 
@@ -18,6 +19,7 @@ function App() {
     <Router>
       <UserProvider>
         <Navbar />
+        <Message />
         <Container>
           <Routes>
             <Route path='/register' element={<Register />} />
