@@ -1,10 +1,23 @@
+import api from '../../../utils/api'
 import '../../form/Form.css'
 import { Input } from '../../form/Input'
 import './Profile.css'
 import React, { useEffect, useState } from 'react'
 
+
 export const Profile = () => {
     const [user, setUser] = useState({});
+    const [token] = useState(localStorage.getItem('token' || ""))
+
+    useEffect(()=>{
+        api.get('/users/checkuser', {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`
+            }
+        }).then((response) => {
+            setUser(response.data)
+        })
+    },[token])
 
     const onFileChange = (e) => {
 
