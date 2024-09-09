@@ -1,25 +1,28 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Input } from '../../form/Input'
 import '../../../components/form/Form.css'
+/*Context*/
+import { Context } from '../../../context/UserContext'
 
 export const Register = () => {
 
   const [user, setUser] = useState({});
+  const { register } = useContext(Context)
 
   const handleOnChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value })
   }
 
-  const handleSubmit= (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(user)
+    register(user);
   }
 
   return (
     <section className='form-container'>
       <h1>Registrar</h1>
-      <form  onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <Input
           text={"Nome"}
           type={"text"}
