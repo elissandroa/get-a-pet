@@ -7,7 +7,7 @@ import { Context } from '../../context/UserContext'
 
 
 export const Navbar = () => {
-    const { authenticated } = useContext(Context)
+    const { authenticated, logout } = useContext(Context)
     return (
         <nav className="navbar">
             <div className='navbar_logo'>
@@ -17,7 +17,7 @@ export const Navbar = () => {
             <ul>
                 {authenticated && <>
                     <li><Link to={'/'}>Adotar</Link></li>
-                    <li><Link to={'/'}>Logout</Link></li>
+                    <li onClick={logout}><Link to={'/'}>Sair</Link></li>
                 </>}
 
                 {!authenticated && <>
