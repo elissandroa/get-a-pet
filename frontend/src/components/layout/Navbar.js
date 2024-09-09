@@ -17,6 +17,7 @@ export const Navbar = () => {
             <ul>
                 {authenticated && <>
                     <li><Link to={'/'}>Adotar</Link></li>
+                    <li><Link to={'/user/profile'}>Perfil</Link></li>
                     <li onClick={logout}><Link to={'/'}>Sair</Link></li>
                 </>}
 
