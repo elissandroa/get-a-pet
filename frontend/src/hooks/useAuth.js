@@ -10,13 +10,13 @@ export default function useAuth() {
     const { setFlashMessage } = useFlashMessage();
     const navigate = useNavigate()
 
-    useEffect(()=>{
+    useEffect(() => {
         const token = localStorage.getItem('token');
-        if(token){
+        if (token) {
             api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
             setAuthenticated(true);
         }
-    },[])
+    }, [])
 
     async function register(user) {
         let msgText = "Cadastro realizado com sucesso!";
@@ -39,7 +39,7 @@ export default function useAuth() {
         localStorage.setItem('token', JSON.stringify(data.token))
         navigate('/')
     }
-    function logout(){
+    function logout() {
         const msgText = "Logout realizado com sucesso!";
         const msgType = "success";
         setAuthenticated(false);
