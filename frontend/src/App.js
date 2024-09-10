@@ -12,6 +12,7 @@ import { UserProvider } from './context/UserContext';
 import { Message } from './components/layout/Message';
 import { Profile } from './components/pages/User/Profile';
 import { Mypets } from './components/pages/Pet/Mypets';
+import { AddPet } from './components/pages/Pet/AddPet';
 
 
 
@@ -24,6 +25,7 @@ function App() {
         <Message />
         <Container>
           <Routes>
+          <Route path='/pets/add' element={<AddPet />} />
             <Route path='/pets/mypets' element={<Mypets />} />
             <Route path='/user/profile' element={<Profile />} />
             <Route path='/register' element={<Register />} />
