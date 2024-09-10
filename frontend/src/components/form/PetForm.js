@@ -25,8 +25,7 @@ export const PetForm = ({ handleSubmit, petData, btnText }) => {
 
     const submit = (e) => {
         e.preventDefault();
-        console.log(pet)
-        //handleSubmit(pet);
+        handleSubmit(pet);
     }
 
     return (
@@ -42,10 +41,10 @@ export const PetForm = ({ handleSubmit, petData, btnText }) => {
                     )) :
                         pet.images && pet.images.map((image, index) => (
                             <img
-                            src={`${process.env.REACT_APP_API}/images/pets/${pet.image}`}
-                            alt={pet.name}
-                            key={`${pet.name} + ${index}`}
-                        />
+                                src={`${process.env.REACT_APP_API}/images/pets/${pet.image}`}
+                                alt={pet.name}
+                                key={`${pet.name} + ${index}`}
+                            />
                         ))
                 }
             </div>
