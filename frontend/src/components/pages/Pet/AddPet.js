@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom'
 
 /* Hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage'
+import { PetForm } from '../../form/PetForm'
 
 
 
@@ -19,7 +20,7 @@ export const AddPet = () => {
                 <h1>Cadastre um Pet</h1>
                 <p>Depois ele ficará disponível para adoção.</p>
             </div>
-            <p>Formulário</p>
+            <PetForm btnText={'Cadastrar'} />
         </section>
     )
 }
