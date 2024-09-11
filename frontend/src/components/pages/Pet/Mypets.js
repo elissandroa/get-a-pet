@@ -18,6 +18,26 @@ export const Mypets = () => {
         }).then((response) => setPets(response.data.pets))
             .catch((err) => console.log(err))
     }, [])
+
+    async function removePet(id) {
+        let msgType = 'success';
+
+        const data = await api.delete(`/pets/${id}`, {
+            headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+            }
+        }).then((response) => {
+            const updatedPets = pets.filter((pet) => pet._id != id);
+            setPets(updatedPets);
+            return response.data;
+        }).catch((err) => {
+            msgType = 'error';
+            return err.response.data;
+        })
+
+        setFlashMessage(data.message, msgType);
+    }
+
     return (
         <section>
             <div className='petlist-header'>
@@ -38,7 +58,7 @@ export const Mypets = () => {
                                 {pet.available ? (<>
                                     {pet.adopter && <button className='conclude-btn'>Concluir Adoção</button>}
                                     <Link to={`/pets/edit/${pet._id}`}>Editar</Link>
-                                    <button>Excluir</button>
+                                    <button onClick={() => removePet(pet._id)}>Excluir</button>
                                 </>) : ('Pet já adotado')}
                             </div>
                         </div>
