@@ -3,20 +3,21 @@ import { Link } from 'react-router-dom'
 import { RoundedImage } from '../../layout/RoundedImage'
 import useFlashMessage, { setFlashMessage } from '../../../hooks/useFlashMessage'
 import api from '../../../utils/api'
+import './Dashboard.css'
 
 export const Mypets = () => {
     const [pets, setPets] = useState([]);
     const [token] = useState(localStorage.getItem('token' || ''));
     const { setFlashMessage } = useFlashMessage();
 
-    useEffect(()=>{
+    useEffect(() => {
         api.get('/pets/mypets', {
             headers: {
                 Authorization: `Bearer ${JSON.parse(token)}`
             }
         }).then((response) => setPets(response.data.pets))
-        .catch((err) => console.log(err))
-    },[])
+            .catch((err) => console.log(err))
+    }, [])
     return (
         <section>
             <div>
@@ -24,7 +25,25 @@ export const Mypets = () => {
                 <Link to={'/pets/add'}>Cadastrar Pet</Link>
             </div>
             <div>
-                {pets.length > 0 && <p>Meus Pets Cadastrados</p>}
+                {pets.length > 0 &&
+                    pets.map((pet) => (
+                        <div key={pet._id}>
+                            <RoundedImage
+                                src={`${process.env.REACT_APP_API}/images/pets/${pet.images[0]}`}
+                                alt={pet.name}
+                                width={'75px'}
+                            />
+                            <span className="bold">{pet.name}</span>
+                            <div className="actions">
+                                {pet.available ? (<>
+                                    {pet.adopter && <button>Concluir Adoção</button>}
+                                    <Link to={`/pets/edit/${pet._id}`}>Editar</Link>
+                                    <button>Excluir</button>
+                                </>) : ('Pet já adotado')}
+                            </div>
+                        </div>
+                    ))
+                }
                 {pets.length === 0 && <p>Não há Pets cadastrados!</p>}
             </div>
         </section>
