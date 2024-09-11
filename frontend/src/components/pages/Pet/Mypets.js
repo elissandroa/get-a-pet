@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { RoundedImage } from '../../layout/RoundedImage'
-import useFlashMessage, { setFlashMessage } from '../../../hooks/useFlashMessage'
+import useFlashMessage from '../../../hooks/useFlashMessage'
 import api from '../../../utils/api'
 import './Dashboard.css'
 
@@ -17,7 +17,7 @@ export const Mypets = () => {
             }
         }).then((response) => setPets(response.data.pets))
             .catch((err) => console.log(err))
-    }, [])
+    }, [token])
 
     async function removePet(id) {
         let msgType = 'success';
@@ -27,7 +27,7 @@ export const Mypets = () => {
                 Authorization: `Bearer ${JSON.parse(token)}`,
             }
         }).then((response) => {
-            const updatedPets = pets.filter((pet) => pet._id != id);
+            const updatedPets = pets.filter((pet) => pet._id !== id);
             setPets(updatedPets);
             return response.data;
         }).catch((err) => {
