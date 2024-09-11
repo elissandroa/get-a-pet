@@ -43,7 +43,7 @@ export const PetForm = ({ handleSubmit, petData, btnText }) => {
                             <img
                                 src={`${process.env.REACT_APP_API}/images/pets/${image}`}
                                 alt={pet.name}
-                                key={`${pet.name} + ${index}`}
+                                key={`${pet.name}+${index}`}
                             />
                         ))
                 }
