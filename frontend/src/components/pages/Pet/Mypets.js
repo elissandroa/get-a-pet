@@ -20,23 +20,23 @@ export const Mypets = () => {
     }, [])
     return (
         <section>
-            <div>
+            <div className='petlist-header'>
                 <h1>Meus Pets</h1>
                 <Link to={'/pets/add'}>Cadastrar Pet</Link>
             </div>
-            <div>
+            <div className='petlist-container'>
                 {pets.length > 0 &&
                     pets.map((pet) => (
-                        <div key={pet._id}>
+                        <div className=' petlist-row' key={pet._id}>
                             <RoundedImage
                                 src={`${process.env.REACT_APP_API}/images/pets/${pet.images[0]}`}
                                 alt={pet.name}
-                                width={'75px'}
+                                width={'px75'}
                             />
                             <span className="bold">{pet.name}</span>
                             <div className="actions">
                                 {pet.available ? (<>
-                                    {pet.adopter && <button>Concluir Adoção</button>}
+                                    {pet.adopter && <button className='conclude-btn'>Concluir Adoção</button>}
                                     <Link to={`/pets/edit/${pet._id}`}>Editar</Link>
                                     <button>Excluir</button>
                                 </>) : ('Pet já adotado')}
