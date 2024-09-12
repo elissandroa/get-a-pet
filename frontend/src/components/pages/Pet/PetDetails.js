@@ -9,7 +9,7 @@ import useFlashMessage from '../../../hooks/useFlashMessage'
 
 export const PetDetails = () => {
     const [pet, setPet] = useState({});
-    const { setFlasMessage } = useFlashMessage();
+    const { setFlashMessage } = useFlashMessage();
     const { id } = useParams()
     const [token] = useState(localStorage.getItem('token' || ''));
 
@@ -30,10 +30,26 @@ export const PetDetails = () => {
             })
     }
 
+    async function schedule() {
+        let msgType = 'success';
+
+        const data = await api.patch(`pets/schedule/${pet._id}`, {
+            Authorization: `Bearer ${JSON.parse(token)}`,
+
+        }).then((response) => {
+            return response.data;
+        }).catch((err) => {
+            msgType = 'error';
+            return err.response.data;
+        });
+        setFlashMessage(data.message, msgType)
+    }
+
+
     return (
         <>
             {pet.name && (
-                <section className='pet-details-container'> 
+                <section className='pet-details-container'>
                     <div className='pet-details-header'>
                         <h1>Conhecendo o Pet: {pet.name}</h1>
                         <p>Se tiver interesse, marque uma visita para conhecê-lo</p>
@@ -50,10 +66,10 @@ export const PetDetails = () => {
                     <p>
                         <span className="bold">Peso: {pet.wheight}Kg</span>
                         <p>
-                        <span className="bold">Idade: {pet.age} anos</span>
+                            <span className="bold">Idade: {pet.age} anos</span>
+                        </p>
                     </p>
-                    </p>
-                    {token ? <button>Solicitar uma visita</button> : <p>Você precisa <Link to={'/register'}>criar uma conta</Link> para solicitar a visita!</p>}
+                    {token ? <button onClick={schedule}>Solicitar uma visita</button> : <p>Você precisa <Link to={'/register'}>criar uma conta</Link> para solicitar a visita!</p>}
                 </section>
             )}
         </>
