@@ -34,6 +34,11 @@ export const Home = () => {
                   Peso: {pet.wheight}Kg
                 </span>
               </p>
+              <p>
+              <span className="bold">
+                  Idade: {pet.age} anos
+                </span>
+              </p>
               {pet.available ? <Link to={`pets/${pet._id}`}>Mais Detalhes</Link> : <p className='adopted-text'>Adotado</p>}
             </div>
           ))}
