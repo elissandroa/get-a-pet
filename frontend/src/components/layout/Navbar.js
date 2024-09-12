@@ -11,8 +11,8 @@ export const Navbar = () => {
     return (
         <nav className="navbar">
             <div className='navbar_logo'>
-                <img src={logo} alt="Get A Pet" />
-                <h2>Get A Pet</h2>
+                <Link to={'/'}><img src={logo} alt="Get A Pet" /></Link>
+                <Link to={'/'}><h2>Get A Pet</h2></Link>
             </div>
             <ul>
                 {authenticated && <>

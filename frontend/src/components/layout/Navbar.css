@@ -22,6 +22,10 @@
     list-style: none;
 }
 
+.navbar_logo a {
+    text-decoration: none;
+}
+
 .navbar li,
 .navbar li a {
     text-decoration: none;
