@@ -296,7 +296,7 @@ module.exports = class PetController {
             return
         }
         //Check if pet exists
-        const pet = await Pet.findById(id)
+        const pet = await Pet.findOne({ _id: id })
         if (!pet) {
             res.status(404).json({ message: "Pet não encontrado!" })
             return
@@ -305,7 +305,7 @@ module.exports = class PetController {
         const token = await getToken(req)
         const user = await getUserByToken(token)
 
-        if (pet.User._id.equals(user._id)) {
+        if (!pet.User._id.equals(user._id)) {
             res.status(422).json({ message: "Houve um erro ao processar a sua solicitação, tente novamente mais tarde!" })
             return
         }
