@@ -33,12 +33,12 @@ export const PetDetails = () => {
     return (
         <>
             {pet.name && (
-                <section>
-                    <div>
+                <section className='pet-details-container'> 
+                    <div className='pet-details-header'>
                         <h1>Conhecendo o Pet: {pet.name}</h1>
                         <p>Se tiver interesse, marque uma visita para conhecê-lo</p>
                     </div>
-                    <div>
+                    <div className='pet-details-images'>
                         {pet.images.map((image, index) => (
                             <img
                                 src={`${process.env.REACT_APP_API}/images/pets/${image}`}
